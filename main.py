@@ -45,7 +45,7 @@ async def main():
 
         def append_game(game):
             nonlocal text
-            text += f"`- `{game[0]} [[↗]]({game[1]})\n"
+            text += f"`- `{game[0]} [↗]({game[1]})\n"
 
         def append_title(title):
             nonlocal text
