@@ -15,28 +15,28 @@ async def main():
         scoring = []
         apps = []
 
-        async for text in app.get_chat_history(chat_id=getenv("CHANNEL_ID")):
-            text: types.Message
+        async for message in app.get_chat_history(chat_id=getenv("CHANNEL_ID")):
+            message: types.Message
 
-            if not text.caption:
+            if not message.caption:
                 continue
 
-            title = text.caption.split("\n")[0].strip()
-            link = text.link
+            title = message.caption.split("\n")[0].strip()
+            link = message.link
 
             game = (title, link)
 
-            if "#in_progress" in text.caption:
+            if "#in_progress" in message.caption:
                 in_progress.append(game)
-            elif "#drop" in text.caption:
+            elif "#drop" in message.caption:
                 dropped.append(game)
-            elif "#completed" in text.caption:
+            elif "#completed" in message.caption:
                 completed.append(game)
-            elif "#todo" in text.caption:
+            elif "#todo" in message.caption:
                 todo.append(game)
-            elif "#score" in text.caption:
+            elif "#score" in message.caption:
                 scoring.append(game)
-            elif "#app" in text.caption:
+            elif "#app" in message.caption:
                 apps.append(game)
             else:
                 print(f"Unknown status for {title}")
@@ -53,6 +53,8 @@ async def main():
             games.reverse()
             text += append_title(title)
             text += "".join([append_game(game) for game in games])
+
+        print(len(text))
 
         await app.edit_message_text(
             chat_id=getenv("CHANNEL_ID"),
