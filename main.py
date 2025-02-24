@@ -44,15 +44,18 @@ async def main():
         text = ""
 
         def append_game(game):
-            return f"`- `{game[0]} [[↗]]({game[1]})\n"
+            nonlocal text
+            text += f"`- `{game[0]} [[↗]]({game[1]})\n"
 
         def append_title(title):
-            return f"\n**{title}**\n"
+            nonlocal text
+            text += f"\n**{title}**\n"
 
         for (title, games) in [("In Progress", in_progress), ("Completed", completed), ("Todo", todo), ("Dropped", dropped), ("Scoring", scoring), ("Apps", apps)]:
             games.reverse()
-            text += append_title(title)
-            text += "".join([append_game(game) for game in games])
+            append_title(title)
+            for game in games:
+                append_game(game)
 
         print(len(text))
 
