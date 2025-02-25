@@ -66,21 +66,31 @@ async def main():
 
         text = ""
 
-        def append_game(game):
+        def append_game(game, last):
             nonlocal text
             (title, link, loved) = game
             loved = {True: "❤️ ", False: ""}[loved]
-            text += f"`- `{loved}{title} [↗]({link})\n"
+            prefix = "└─" if last else "├─"
+            text += f"  `{prefix}` {loved}{title} [↗]({link})\n"
 
         def append_title(title):
             nonlocal text
             text += f"\n**{title}**\n"
 
-        for (title, games) in [("▶️ In Progress", in_progress), ("✅ Completed", completed), ("📋 Todo", todo), ("❌ Dropped", dropped), ("🏁 Scoring", scoring), ("⚙️ Apps", apps)]:
+        categories = [
+            ("▶️ In Progress", in_progress),
+            ("📋 Todo", todo),
+            ("✅ Completed", completed),
+            ("❌ Dropped", dropped),
+            ("🏁 Scoring", scoring),
+            ("⚙️ Apps", apps),
+        ]
+
+        for (title, games) in categories:
             games.reverse()
             append_title(title)
             for game in games:
-                append_game(game)
+                append_game(game, game == games[-1])
 
         print(str(int(len(text) / 4096 * 100)) + "%")
 
